@@ -4,6 +4,11 @@ import qualified Data.ByteString.Char8 as C
 import Text.Regex.PCRE ((=~))
 import Ubi
 
+ -- Parse
+
+initSyn :: [Token] -> Bool
+initSyn xs = all (\t -> is (Punct 
+
  -- Punctuation
 
 punctuation c = elem c ",;"

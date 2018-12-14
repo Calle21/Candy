@@ -9,6 +9,21 @@ data Token = FloatTok Float
            | Punct Char
            | Special C.ByteString
 
+tokenFloat :: Token -> Float
+tokenFloat (FloatTok f) = f
+
+tokenInt :: Token -> Int
+tokenInt (IntTok i) = i
+
+tokenChar :: Token -> Char
+tokenChar (Punct c) = c
+
+tokenString :: Token -> C.ByteString
+tokenString t = case t of
+                  Label s   -> s
+                  Name s    -> s
+                  Special s -> s
+
 tokenToString :: Token -> String
 tokenToString tok = case tok of
                       FloatTok f -> show f
