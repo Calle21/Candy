@@ -18,7 +18,8 @@ lex' s = noNull $ loop [] s
                             then loop acc (C.dropWhile whiteSpace' s)
                             else if punctuation c then loop (Punct c : acc) (C.tail s)
                                  else let (toks,s') = C.span tokChar s
-                                          tok | floatSyn toks = FloatTok $ read $ C.unpack toks
+                                          tok | reserved toks = Reserved toks
+                                              | floatSyn toks = FloatTok $ read $ C.unpack toks
                                               | hexSyn toks   = IntTok $ readint 16 (C.drop 2 toks)
                                               | intSyn toks   = IntTok $ readint 10 toks
                                               | labSyn toks   = Label (C.init toks)

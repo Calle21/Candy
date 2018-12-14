@@ -2,12 +2,18 @@ module Types where
 
 import qualified Data.ByteString.Char8 as C
 
+type CombiMonad = [Token] -> Maybe [Token]
+
+data CommandType = Op | Branch | Label'
+
 data Token = FloatTok Float
            | IntTok Int
            | Label C.ByteString
            | Name C.ByteString
            | Punct Char
+           | Reserved C.ByteString
            | Special C.ByteString
+           deriving (Eq)
 
 tokenFloat :: Token -> Float
 tokenFloat (FloatTok f) = f

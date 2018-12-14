@@ -13,6 +13,12 @@ initSyn xs = all (\t -> is (Punct
 
 punctuation c = elem c ",;"
 
+ -- Reserved
+
+reservedNames = map C.pack ["goto", "if", "return"]
+
+reserved s = s `elem` reservedNames
+
  -- Syn
 
 floatSyn, hexSyn, intSyn, labSyn, nameSyn, octSyn :: C.ByteString -> Bool
