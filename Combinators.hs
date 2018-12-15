@@ -12,6 +12,9 @@ toks `match` m = isJust $ m toks
 
  -- Monads
 
+isComparison :: CombiMonad
+isComparison xs = 
+
 isEnd :: CombiMonad
 isEnd [] = Just []
 isEnd _  = Nothing
@@ -28,11 +31,13 @@ one _ _ = Nothing
 
  -- Predicates
 
-isAnd = is (Special (C.pack "&"))
+isAnd = is (Operator (C.pack "&"))
+
+isCloseParen = is (Punct ')')
 
 isComma = is (Punct ',')
 
-isEqual = is (Special (C.pack "="))
+isEqual = is (Comparison (C.pack "="))
 
 isGoto = is (Reserved (C.pack "goto"))
 
@@ -41,21 +46,23 @@ isIf = is (Reserved (C.pack "if"))
 isLabel (Label _) = True
 isLabel _         = False
 
-isMinus = is (Special (C.pack "-"))
+isMinus = is (Operator (C.pack "-"))
 
-isNot = is (Special (C.pack "!"))
+isNot = is (Operator (C.pack "!"))
 
-isOr = is (Special (C.pack "|"))
+isOpenParen = is (Punct '(')
 
-isOver = is (Special (C.pack "/"))
+isOr = is (Operator (C.pack "|"))
 
-isPlus = is (Special (C.pack "+"))
+isOver = is (Operator (C.pack "/"))
+
+isPlus = is (Operator (C.pack "+"))
 
 isSemi = is (Punct ';')
 
-isTimes = is (Special "*")
+isTimes = is (Operator (C.pack "*"))
 
-isXor = is (Special (C.pack "$"))
+isXor = is (Operator (C.pack "$"))
 
  -- Predicate builders
 

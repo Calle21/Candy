@@ -18,12 +18,15 @@ lex' s = noNull $ loop [] s
                             then loop acc (C.dropWhile whiteSpace' s)
                             else if punctuation c then loop (Punct c : acc) (C.tail s)
                                  else let (toks,s') = C.span tokChar s
-                                          tok | reserved toks = Reserved toks
-                                              | floatSyn toks = FloatTok $ read $ C.unpack toks
-                                              | hexSyn toks   = IntTok $ readint 16 (C.drop 2 toks)
-                                              | intSyn toks   = IntTok $ readint 10 toks
-                                              | labSyn toks   = Label (C.init toks)
-                                              | nameSyn toks  = Name toks
-                                              | octSyn toks   = IntTok $ readint 8 (C.tail toks)
-                                              | otherwise     = Special toks
+                                          tok | reserved toks      = Reserved toks
+                                              | arrowSyn toks      = Arrow
+                                              | comparisonSyn toks = Comparison toks
+                                              | floatSyn toks      = FloatTok $ read $ C.unpack toks
+                                              | hexSyn toks        = IntTok $ readint 16 (C.drop 2 toks)
+                                              | intSyn toks        = IntTok $ readint 10 toks
+                                              | labSyn toks        = Label (C.init toks)
+                                              | nameSyn toks       = Name toks
+                                              | octSyn toks        = IntTok $ readint 8 (C.tail toks)
+                                              | opSyn toks         = Operator toks
+                                              | otherwise          = error "Bad token"
                                       in loop (tok : acc) s'

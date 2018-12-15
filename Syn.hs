@@ -1,8 +1,15 @@
 module Syn where
 
-import qualified Data.ByteString.Char8 as C
 import Text.Regex.PCRE ((=~))
 import Ubi
+
+ -- Comparisons
+
+comparisons = map pack ["=","<",">","<=",">="]
+
+ -- Operators
+
+operators = map pack ["+","-","*","/","&","|","$","^","!"]
 
  -- Parse
 
@@ -11,30 +18,36 @@ initSyn xs = all (\t -> is (Punct
 
  -- Punctuation
 
-punctuation c = elem c ",;"
+punctuation c = elem c ",;()"
 
  -- Reserved
 
-reservedNames = map C.pack ["goto", "if", "return"]
+reservedNames = map pack ["goto", "if", "return"]
 
 reserved s = s `elem` reservedNames
 
  -- Syn
 
-floatSyn, hexSyn, intSyn, labSyn, nameSyn, octSyn :: C.ByteString -> Bool
+arrowSyn, comparisonSyn, floatSyn, hexSyn, intSyn, labSyn, nameSyn, octSyn, opSyn :: ByteString -> Bool
 
-floatSyn s = C.unpack s =~ "^[0-9]+\\.[0-9]+$"
+arrowSyn s = s `elem` operators
 
-hexSyn s = C.unpack s =~ "^0h-?[0-9a-fA-F]+$"
+comparisonSyn s = s `elem` comparisons
 
-intSyn s = C.unpack s =~ "^-?[1-9][0-9]*$"
+floatSyn s = unpack s =~ "^[0-9]+\\.[0-9]+$"
 
-labSyn s = C.unpack s =~ "^[a-zA-Z_][a-zA-Z_0-9]*:$"
+hexSyn s = unpack s =~ "^0h-?[0-9a-fA-F]+$"
 
-nameSyn s = let s' = C.unpack s
+intSyn s = unpack s =~ "^-?[1-9][0-9]*$"
+
+labSyn s = unpack s =~ "^[a-zA-Z_][a-zA-Z_0-9]*:$"
+
+nameSyn s = let s' = unpack s
             in s' =~ "^[a-z0-9]*$" && any isLower s'
 
-octSyn s = C.unpack s =~ "^0-?[0-7]+$"
+octSyn s = unpack s =~ "^0-?[0-7]+$"
+
+opSyn s = s `elem` operators
 
  -- Token
 

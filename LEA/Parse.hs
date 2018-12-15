@@ -4,7 +4,7 @@ import qualified Data.ByteString.Char8 as C
 import Types
 import Ubi
 
-parse :: [[Token]] -> ???
+parse :: [[Token]] -> [LEAInstruction]
 parse (x:xs) | initSyn x = parseBody (getVars x) xs
              | otherwise = error "Expected var declaration at beginning"
   where
